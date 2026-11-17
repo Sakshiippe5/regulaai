@@ -1,6 +1,7 @@
 import pymupdf
 
 PAGE_1 = """SAMPLE REGULATORY CIRCULAR (FICTIONAL - FOR DEVELOPMENT ONLY)
+Issued by: Sample Banking Regulator of India (fictional)
 Circular No. SAMPLE/2026-27/01
 Date: April 1, 2026
 Subject: Cyber Incident Reporting and Resilience for Urban Co-operative Banks

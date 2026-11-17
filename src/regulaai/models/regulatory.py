@@ -27,6 +27,9 @@ class Circular(BaseModel):
     """A regulatory document after the Extraction Agent has processed it."""
 
     title: str
-    regulator: str = Field(description="e.g. RBI, SEBI")
+    regulator: str | None = Field(
+            default=None, description="e.g. RBI, SEBI. None if the document does not name it"
+        )
     issue_date: date | None = None
     obligations: list[Obligation] = []
+    

@@ -25,3 +25,7 @@ def test_invalid_type_is_rejected():
 def test_circular_holds_obligations():
     c = Circular(title="Cyber Resilience", regulator="RBI")
     assert c.obligations == []
+
+def test_circular_without_named_regulator_is_valid():
+    c = Circular(title="Untitled circular")
+    assert c.regulator is None
