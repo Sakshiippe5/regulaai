@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Callable, Protocol
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
@@ -16,7 +17,7 @@ from regulaai.models.applicability import ObligationApplicability
 from regulaai.models.institution import InstitutionProfile
 from regulaai.models.regulatory import Circular, Obligation
 from regulaai.models.report import ComplianceReport, RemediationTask, TaskStatus
-from regulaai.rag.index import PolicyIndex, SearchHit
+from regulaai.rag.index import SearchHit
 from regulaai.tools.tasks import append_audit, create_remediation_tasks
 
 
@@ -39,13 +40,24 @@ def in_scope(state: RunState) -> list[Obligation]:
     return [o for o in state.circular.obligations if o.id in keep]
 
 
+class PolicySearch(Protocol):
+    def search(self, query: str, k: int = 3) -> list[SearchHit]: ...
+
+
+TaskCreator = Callable[[list[RemediationTask], str], None]
+
+
 def build_graph(
-    index: PolicyIndex,
+    index: PolicySearch,
     llm: StructuredLLM | None = None,
     output_dir: str | Path = "outputs",
+    task_creator: TaskCreator | None = None,
 ):
     llm = llm or LLMClient()
     output_dir = Path(output_dir)
+    task_creator = task_creator or (
+        lambda tasks, reviewer: create_remediation_tasks(tasks, output_dir / "tasks.json")
+    )
 
     def extract_node(state: RunState) -> dict:
         return {"circular": extract_circular(state.doc, llm)}
@@ -98,7 +110,7 @@ def build_graph(
 
     def finalize_node(state: RunState) -> dict:
         approved = [t for t in state.report.tasks if t.status == TaskStatus.APPROVED]
-        create_remediation_tasks(approved, output_dir / "tasks.json")
+        task_creator(approved, state.reviewer or "unknown")
         append_audit(
             {
                 "event": "review_completed",
