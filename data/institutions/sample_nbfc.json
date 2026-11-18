@@ -1,0 +1,6 @@
+{
+  "name": "Sample Finance Company (fictional)",
+  "institution_type": "Non-Banking Financial Company",
+  "size_notes": "12 branches",
+  "services": ["vehicle loans", "gold loans"]
+}

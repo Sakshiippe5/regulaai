@@ -31,5 +31,9 @@ class Circular(BaseModel):
             default=None, description="e.g. RBI, SEBI. None if the document does not name it"
         )
     issue_date: date | None = None
+    applicability_statement: str | None = Field(
+        default=None,
+        description="Verbatim clause saying which institutions the circular applies to, if stated",
+    )
     obligations: list[Obligation] = []
     

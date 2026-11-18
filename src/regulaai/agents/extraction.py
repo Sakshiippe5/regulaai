@@ -19,6 +19,7 @@ Rules:
 - title, regulator, issue_date: take them from the document header.
 - Use id "TBD" for every obligation. IDs are assigned later.
 - Never invent information. If something is not stated, use null.
+- applicability_statement: copy VERBATIM the clause stating which institutions the circular applies to (e.g. section 1.1). null if the document has none.
 """
 
 

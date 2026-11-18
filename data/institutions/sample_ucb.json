@@ -1,0 +1,6 @@
+{
+  "name": "Sample Urban Co-operative Bank (fictional)",
+  "institution_type": "Urban Co-operative Bank",
+  "size_notes": "40 branches",
+  "services": ["retail deposits", "retail loans", "internet banking", "mobile banking"]
+}
